@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>COMPARE TYRES - App</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#111111">
+<style>
+body{margin:0;font-family:Arial;background:#f4f5f7}
+.header{background:#fff;text-align:center;padding:20px}
+.logo{max-width:460px;width:92%}
+.banner{background:#FFC700;text-align:center;padding:12px;font-weight:900}
+.install{background:#111;color:#fff;margin:12px 14px;border-radius:14px;padding:16px;text-align:center}
+.btn-install{background:#FFC700;color:#000;padding:14px 24px;border:none;border-radius:10px;font-weight:900;font-size:16px;width:100%}
+.shop{background:#fff;margin:12px 14px;padding:14px;border-radius:12px}
+.ad{background:#111;color:#fff;text-align:center;padding:24px 15px;margin-top:18px}
+
+/* Popup modal styles */
+#shopPopup {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+#shopPopup > div {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+#shopPopup p {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+#listShopBtn {
+  background: #FFC700;
+  border: none;
+  padding: 12px 24px;
+  font-weight: 700;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="header"><img class="logo" src="icon-512.png"></div>
+<div class="banner">📱 INSTALL AS APP - TAP BUTTON BELOW!</div>
+<div class="install">
+  <div style="font-size:18px;font-weight:900">COMPARE TYRES APP</div>
+  <div style="color:#aaa;font-size:13px;margin:8px 0">Cheapest Price - Best Service - Near You</div>
+  <button class="btn-install" id="installBtn">📲 INSTALL APP NOW - FREE</button>
+  <div style="font-size:11px;color:#888;margin-top:8px">Works offline • No Play Store • 0.5MB</div>
+</div>
+<div style="padding:0 14px;font-weight:900">Top Shops in Vaal Triangle</div>
+<div class="shop"><b>Vaal Tyre - Vereeniging</b><br>⭐4.8 • From R450</div>
+<div class="shop"><b>Sedibeng Wheels - Vanderbijlpark</b><br>⭐4.6 • From R520</div>
+<div class="shop"><b>Prospect Tyres - Sasolburg</b><br>⭐4.7 • From R480</div>
+<div class="ad"><h3 style="color:#FFC700;margin:0">ADVERTISE YOUR SHOP - R99/month</h3><a href="https://wa.me/27712311646" style="color:#FFC700">WHATSAPP 0712311646</a></div>
+
+<!-- Popup Modal -->
+<div id="shopPopup">
+  <div>
+    <p>List your shop today, join hundreds of owners that simplify life for the motorist.</p>
+    <button id="listShopBtn">List</button>
+  </div>
+</div>
+
+<script>
+let deferredPrompt;
+const btn=document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault();
+  deferredPrompt=e;
+  btn.textContent='📲 INSTALL APP NOW - TAP HERE!';
+});
+btn.addEventListener('click', async () => {
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    const r = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  } else {
+    alert('To install:\nAndroid: Tap ⋮ (3 dots) -> Add to Home Screen\n iPhone: Tap Share -> Add to Home Screen');
+  }
+});
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js');
+}
+
+// Show the popup after page load
+window.addEventListener('load', () => {
+  document.getElementById('shopPopup').style.display = 'flex';
+});
+
+// Redirect to signup on button click
+document.getElementById('listShopBtn').addEventListener('click', () => {
+  window.location.href = '/signup.html'; // Update with your signup page link
+});
+</script>
+</body>
+</html>
